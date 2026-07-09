@@ -1,0 +1,40 @@
+.title-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* fade in when hovering the whole widget, not just the bar itself */
+.widget-container:hover .title-bar {
+    opacity: 1;
+}
+
+.drag-region {
+    flex: 1;
+    height: 100%;
+    -webkit-app-region: drag;
+}
+
+.controls {
+    display: flex;
+    gap: 6px;
+    padding-right: 8px;
+    -webkit-app-region: no-drag;
+}
+
+.controls button {
+    -webkit-app-region: no-drag;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}

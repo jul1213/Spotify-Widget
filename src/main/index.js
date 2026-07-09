@@ -10,6 +10,8 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    frame: false,
+    transparent: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
