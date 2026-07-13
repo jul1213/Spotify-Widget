@@ -7,15 +7,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    opacity: 0;
-    transition: opacity 0.2s ease;
     z-index: 10;
     background: rgba(0, 0, 0, 0.4);
+
+    /* hidden state: shifted up above its own position & invisible */
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.2s ease 1s, opacity 0.2s ease 1s;
 }
 
-/* fade in when hovering the whole widget, not just the bar itself */
+/* visible state: slides down */
 .widget-container:hover .title-bar {
+    transform: translateY(0);
     opacity: 1;
+    transition-delay: 0s
 }
 
 .drag-region {
