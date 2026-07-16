@@ -44,7 +44,8 @@
     position: absolute;
     width: 13.8%;
     aspect-ratio: 1 / 1;
-    top: 74.3%;
+    /* top: 74.3%; */
+    bottom: 8%;
     left: 50%;
     transform: translate(-50%);
 }
@@ -53,7 +54,7 @@
     position: absolute;
     width: 23%;
     aspect-ratio: 1 / 1;
-    top: 14.6%;
+    top: 10%;
     left: 50%;
     transform: translate(-50%);
 }
