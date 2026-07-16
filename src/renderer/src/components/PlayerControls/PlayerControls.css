@@ -1,0 +1,72 @@
+.click-wheel {
+    position: relative;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 0.75px solid #b3b3b3;
+    aspect-ratio: 1 / 1;
+    width: 53.6%;
+    /* left: 50%;
+    transform: translate(-50%); */
+    /* top: 55%; */
+}
+
+.centre-button {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #b5e3d8;
+    border: 0.75px solid #b3b3b3;
+    aspect-ratio: 1 / 1;
+    width: 35.8%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rewind-button {
+    position: absolute;
+    width: 16%;
+    aspect-ratio: 1 / 1;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+.skip-button {
+    position: absolute;
+    width: 16%;
+    aspect-ratio: 1 / 1;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+}
+
+.play-button {
+    position: absolute;
+    width: 13.8%;
+    aspect-ratio: 1 / 1;
+    top: 74.3%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.queue-button {
+    position: absolute;
+    width: 23%;
+    aspect-ratio: 1 / 1;
+    top: 14.6%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.click-wheel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.click-wheel button:not(.centre-button) {
+    border: none;
+    background: transparent;
+    padding: 0;
+    /* cursor: pointer; */
+}

@@ -1,12 +1,13 @@
 import TitleBar from './components/TitleBar/TitleBar'
 import './App.css'
+import PlayerControls from './components/PlayerControls/PlayerControls'
 
 function App() {
   return (
     <div className="widget-container">
       <TitleBar />
       <div className="player-content">
-        <p>Hello Spotify Widget!</p>
+        <PlayerControls />
       </div>
     </div>
   )
