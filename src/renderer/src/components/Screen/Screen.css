@@ -1,0 +1,19 @@
+.screen-container {
+    position: relative;
+    border-radius: 10px;
+    background-color: #292525;
+    width: 86.2%;
+    height: 45%;
+    margin-top: -8px;
+}
+
+.screen-display {
+    position: absolute;
+    border-radius: 2px;
+    background-color: #dde9ff;
+    width: 95%;
+    height: 92%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
