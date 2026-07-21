@@ -1,6 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { loginToSpotify } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -58,6 +59,14 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
   ipcMain.on('minimize', () => mainWindow.minimize())
   ipcMain.on('close', () => mainWindow.close())
+
+  let spotifyTokens = null
+
+  ipcMain.handle('spotify-login', async () => {
+    spotifyTokens = await loginToSpotify()
+    console.log('Tokens received:', spotifyTokens)
+    return spotifyTokens
+  })
 
   createWindow()
 
