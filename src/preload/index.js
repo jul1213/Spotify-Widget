@@ -17,7 +17,7 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('windowControls', windowControls)
-    contextBridge.exposeInIsolatedWorld('spotifyControls', spotifyControls)
+    contextBridge.exposeInMainWorld('spotifyControls', spotifyControls)
   } catch (error) {
     console.error(error)
   }

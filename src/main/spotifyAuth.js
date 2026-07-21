@@ -45,6 +45,12 @@ export function loginToSpotify() {
         // RESPONSE
         const server = http.createServer(async (req, res) => {
             const url = new URL(req.url, REDIRECT_URI)
+
+            // Ignore anything that isn't the real callback (e.g. browser's favicon request)
+            if (url.pathname !== '/callback') {
+                res.end()
+                return
+            }
             const code = url.searchParams.get('code')
 
             if (code) {

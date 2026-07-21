@@ -2,12 +2,20 @@ import './Screen.css'
 import TrackInfo from '../TrackInfo/TrackInfo'
 import ProgressBar from '../ProgressBar/ProgressBar'
 
-function Screen() {
+function Screen({ isLoggedIn, onLogin }) {
     return (
         <div className="screen-container" >
             <div className="screen-display">
-                <TrackInfo />
-                <ProgressBar />
+                {isLoggedIn ? (
+                    <>
+                        <TrackInfo />
+                        <ProgressBar />
+                    </>
+                ) : (
+                    <button className='login-button' onClick={onLogin}>
+                        Log in with Spotify
+                    </button>
+                )}
             </div>
         </div>
     )
