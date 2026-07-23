@@ -1,12 +1,19 @@
 import './TrackInfo.css'
 
-function TrackInfo() {
+function TrackInfo({ track }) {
+    const trackName = track?.item?.name ?? "Nothing playing"
+    const artistName = track?.item?.artists?.[0]?.name ?? ''
+    const albumArtUrl = track?.item?.album?.images?.[0]?.url
+
     return (
         <div className='track-container'>
-            <div className='album-cover' />
+            <div
+                className='album-cover'
+                style={{ backgroundImage: albumArtUrl ? `url(${albumArtUrl})` : 'none' }}
+            />
             <div className='text-container'>
-                <span className='track-name'>Track Name</span>
-                <span className='artist-name'>Artist Name</span>
+                <span className='track-name'>{trackName}</span>
+                <span className='artist-name'>{artistName}</span>
             </div>
         </div>
     )

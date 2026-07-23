@@ -110,3 +110,23 @@ export async function refreshAccessToken(refreshToken) {
     const response = await fetch('https://accounts.spotify.com/api/token', payload)
     return response.json()
 }
+
+export async function getCurrentlyPlaying(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    // no content
+    if (response.status === 204) {
+        return null
+    }
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
+
+    return response.json()
+}

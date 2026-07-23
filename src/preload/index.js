@@ -7,7 +7,8 @@ const windowControls = {
 }
 
 const spotifyControls = {
-  login: () => ipcRenderer.invoke('spotify-login')
+  login: () => ipcRenderer.invoke('spotify-login'),
+  getCurrentTrack: () => ipcRenderer.invoke('spotify-get-current-track')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { loginToSpotify } from './spotifyAuth'
+import { getCurrentlyPlaying, loginToSpotify } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -25,6 +25,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -66,6 +67,11 @@ app.whenReady().then(() => {
     spotifyTokens = await loginToSpotify()
     console.log('Tokens received:', spotifyTokens)
     return spotifyTokens
+  })
+
+  ipcMain.handle('spotify-get-current-track', async() => {
+    if (!spotifyTokens) return null
+    return getCurrentlyPlaying(spotifyTokens.access_token)
   })
 
   createWindow()
