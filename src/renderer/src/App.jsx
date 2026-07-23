@@ -30,6 +30,15 @@ function App() {
     return () => clearInterval(interval)    // cleanup if component unmounts or if isLoggedIn changes
   }, [isLoggedIn])
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const loggedIn = await window.spotifyControls.checkAuth()
+      console.log('Startup auth check:', loggedIn)
+      setIsLoggedIn(loggedIn)
+    }
+    checkAuth()
+  }, [])
+
 
   return (
     <div className="widget-container">

@@ -1,6 +1,8 @@
-import { shell } from 'electron'
+import { app, safeStorage, shell } from 'electron'
 import crypto from 'crypto'
 import http from 'http'
+import fs from 'fs'
+import path from 'path'
 
 const CLIENT_ID = 'e22c40cb74dd4ea9a236eb762dd2dfbb'
 const REDIRECT_URI = 'http://127.0.0.1:8888/callback'
@@ -9,6 +11,28 @@ const SCOPES = [
     'user-modify-playback-state',
     'user-read-currently-playing'
 ].join(' ')
+
+const TOKEN_PATH = path.join(app.getPath('userData'), 'spotify-tokens.enc')
+
+export async function saveTokens(tokens) {
+    if (!safeStorage.isAsyncEncryptionAvailable()) {
+        console.warn('Encryption not available - tokens will not be saved securely')
+        return 
+    }
+    const encrypted = await safeStorage.encryptStringAsync(JSON.stringify(tokens))
+    fs.writeFileSync(TOKEN_PATH, encrypted) 
+}
+
+export async function loadTokens() {
+    try {
+        const encrypted = fs.readFileSync(TOKEN_PATH)
+        const { result } = await safeStorage.decryptStringAsync(encrypted)
+        return JSON.parse(result)
+    } catch (err) {
+        console.error('loadTokens failed:', err)
+        return null
+    }
+}
 
 
 /* the PKCE authorization flow starts with the creation of a code verifier. */
@@ -95,6 +119,7 @@ async function exchangeCodeForTokens(code, codeVerifier) {
     return response.json()
 }
 
+// REQUEST NEW ACCESS TOKEN WITH REFRESH TOKEN
 export async function refreshAccessToken(refreshToken) {
     const payload = {
         method: 'POST',

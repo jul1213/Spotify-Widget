@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { getCurrentlyPlaying, loginToSpotify } from './spotifyAuth'
+import { getCurrentlyPlaying, loadTokens, loginToSpotify, refreshAccessToken, saveTokens } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -45,7 +45,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
@@ -61,17 +61,29 @@ app.whenReady().then(() => {
   ipcMain.on('minimize', () => mainWindow.minimize())
   ipcMain.on('close', () => mainWindow.close())
 
-  let spotifyTokens = null
+  let spotifyTokens = await loadTokens()
 
   ipcMain.handle('spotify-login', async () => {
     spotifyTokens = await loginToSpotify()
-    console.log('Tokens received:', spotifyTokens)
+    await saveTokens(spotifyTokens)
     return spotifyTokens
+  })
+  
+  ipcMain.handle('spotify-check-auth', async() => {
+    return spotifyTokens !== null
   })
 
   ipcMain.handle('spotify-get-current-track', async() => {
     if (!spotifyTokens) return null
-    return getCurrentlyPlaying(spotifyTokens.access_token)
+    let data = await getCurrentlyPlaying(spotifyTokens.access_token)
+
+    if (data?.error?.status === 401) {
+      spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
+      await saveTokens(spotifyTokens)
+      data = await getCurrentlyPlaying(spotifyTokens.access_token)
+    }
+
+    return data
   })
 
   createWindow()
