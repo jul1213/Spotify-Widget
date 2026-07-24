@@ -10,6 +10,10 @@ const spotifyControls = {
   login: () => ipcRenderer.invoke('spotify-login'),
   getCurrentTrack: () => ipcRenderer.invoke('spotify-get-current-track'),
   checkAuth: () => ipcRenderer.invoke('spotify-check-auth'),
+  play: () => ipcRenderer.send('play-track'),
+  pause: () => ipcRenderer.send('pause-track'),
+  skip: () => ipcRenderer.send('skip-track'),
+  prev: () => ipcRenderer.send('prev-track'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

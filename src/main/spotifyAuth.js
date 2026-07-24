@@ -133,7 +133,12 @@ export async function refreshAccessToken(refreshToken) {
         }).toString(),
     }
     const response = await fetch('https://accounts.spotify.com/api/token', payload)
-    return response.json()
+    const data = await response.json()
+
+    return {
+        ...data,
+        refresh_token: data.refresh_token ?? refreshToken           // keep old one if spotify didn't give new
+    }
 }
 
 export async function getCurrentlyPlaying(accessToken) {
@@ -154,4 +159,56 @@ export async function getCurrentlyPlaying(accessToken) {
     }
 
     return response.json()
+}
+
+export async function pauseTrack(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/pause', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
+}
+
+export async function playTrack(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
+}
+
+export async function skipTrack(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/next', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
+}
+
+export async function previousTrack(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/previous', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
 }

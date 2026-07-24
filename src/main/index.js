@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { getCurrentlyPlaying, loadTokens, loginToSpotify, refreshAccessToken, saveTokens } from './spotifyAuth'
+import { getCurrentlyPlaying, loadTokens, loginToSpotify, pauseTrack, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -25,7 +25,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
+    // mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -73,18 +73,40 @@ app.whenReady().then(async () => {
     return spotifyTokens !== null
   })
 
+  async function withValidToken(apiCall) {
+    try {
+      return await apiCall(spotifyTokens.access_token)
+    } catch (err) {
+        try {
+          // crude check first
+        spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
+        await saveTokens(spotifyTokens)
+        return await apiCall(spotifyTokens.access_token)
+      } catch (retryErr) {
+        console.error('Spotify action failed permanently:', retryErr.message)
+        return null // swallow it here, once, centrally
+      }
+    }
+  }
+
   ipcMain.handle('spotify-get-current-track', async() => {
     if (!spotifyTokens) return null
-    let data = await getCurrentlyPlaying(spotifyTokens.access_token)
+    // let data = await getCurrentlyPlaying(spotifyTokens.access_token)
 
-    if (data?.error?.status === 401) {
-      spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
-      await saveTokens(spotifyTokens)
-      data = await getCurrentlyPlaying(spotifyTokens.access_token)
-    }
+    // if (data?.error?.status === 401) {
+    //   spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
+    //   await saveTokens(spotifyTokens)
+    //   data = await getCurrentlyPlaying(spotifyTokens.access_token)
+    // }
 
-    return data
+    // return data
+    return withValidToken(getCurrentlyPlaying)
   })
+
+  ipcMain.on('pause-track', () => withValidToken(pauseTrack))
+  ipcMain.on('play-track', () => withValidToken(playTrack))
+  ipcMain.on('skip-track', () => withValidToken(skipTrack))
+  ipcMain.on('prev-track', () => withValidToken(previousTrack))
 
   createWindow()
 

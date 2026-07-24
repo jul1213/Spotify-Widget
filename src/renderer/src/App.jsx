@@ -45,7 +45,7 @@ function App() {
       <TitleBar />
       <div className="player-content">
         <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} />
-        <PlayerControls />
+        <PlayerControls isPlaying={currentTrack?.is_playing ?? false} />
       </div>
     </div>
   )
