@@ -14,6 +14,7 @@ const spotifyControls = {
   pause: () => ipcRenderer.send('pause-track'),
   skip: () => ipcRenderer.send('skip-track'),
   prev: () => ipcRenderer.send('prev-track'),
+  getQueue: () => ipcRenderer.invoke('get-queue'),
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

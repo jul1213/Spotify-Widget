@@ -1,11 +1,7 @@
 import './QueueView.css'
 
-function QueueView() {
-    const upNext = [
-        { name: 'Promiscuous', artists: [{ name: 'Nelly Furtado' }, { name: 'Timberland' }] },
-        { name: 'Rocketeer', artists: [{ name: 'Far East Movement' }, { name: 'Ruff Loaderz' }] },
-        { name: 'Beacuse Of You', artists: [{ name: 'Ne-Yo' }] },
-    ]
+function QueueView({ queueData }) {
+    const upNext = queueData?.queue ?? []
     return (
         <div className='queue-container'>
             <div className='queue-title'>Up Next</div>

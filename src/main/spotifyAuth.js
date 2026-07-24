@@ -212,3 +212,18 @@ export async function previousTrack(accessToken) {
         throw new Error(`Spotify API error: ${response.status}`)
     }
 }
+
+export async function getQueue(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/player/queue', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error(`Spotify API error: ${response.status}`)
+    }
+
+    return response.json()
+}

@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { getCurrentlyPlaying, loadTokens, loginToSpotify, pauseTrack, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
+import { getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -25,7 +25,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    // mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
+    mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -91,15 +91,6 @@ app.whenReady().then(async () => {
 
   ipcMain.handle('spotify-get-current-track', async() => {
     if (!spotifyTokens) return null
-    // let data = await getCurrentlyPlaying(spotifyTokens.access_token)
-
-    // if (data?.error?.status === 401) {
-    //   spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
-    //   await saveTokens(spotifyTokens)
-    //   data = await getCurrentlyPlaying(spotifyTokens.access_token)
-    // }
-
-    // return data
     return withValidToken(getCurrentlyPlaying)
   })
 
@@ -107,6 +98,11 @@ app.whenReady().then(async () => {
   ipcMain.on('play-track', () => withValidToken(playTrack))
   ipcMain.on('skip-track', () => withValidToken(skipTrack))
   ipcMain.on('prev-track', () => withValidToken(previousTrack))
+
+  ipcMain.handle('get-queue', async () => {
+    if (!spotifyTokens) return null
+    return withValidToken(getQueue)
+  })
 
   createWindow()
 

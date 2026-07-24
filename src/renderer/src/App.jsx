@@ -44,11 +44,26 @@ function App() {
 
   const toggleQueue = () => setShowQueue(prev => !prev)
 
+  useEffect(() => {
+    if (!showQueue) return
+
+    const fetchQueue = async () => {
+      const data = await window.spotifyControls.getQueue()
+      console.log('Fetched queue data:', data)
+      setQueueData(data)
+    }
+
+    fetchQueue()    // fetch immediately when queue view opens
+    const interval = setInterval(fetchQueue, 2000)
+
+    return () => clearInterval(interval)
+  }, [showQueue])
+
   return (
     <div className="widget-container">
       <TitleBar />
       <div className="player-content">
-        <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} showQueue={showQueue} queueData={null} />
+        <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} showQueue={showQueue} queueData={queueData} />
         <PlayerControls isPlaying={currentTrack?.is_playing ?? false} onToggleQueue={toggleQueue} />
       </div>
     </div>
