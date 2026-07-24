@@ -4,10 +4,10 @@ import skipIcon from '../../assets/skip.svg'
 import playIcon from '../../assets/play.svg'
 import queueIcon from '../../assets/queue.svg'
 
-function PlayerControls({ isPlaying }) {
+function PlayerControls({ isPlaying, onToggleQueue }) {
     const handleSkip = () => window.spotifyControls.skip()
     const handlePrev = () => window.spotifyControls.prev()
-    const handleQueue = () => console.log("queue clicked")
+    // const handleQueue = () => console.log("queue clicked")
     const handleSelect = () => console.log("select clicked")
 
     const handlePlayPause = () => {
@@ -30,7 +30,7 @@ function PlayerControls({ isPlaying }) {
             <button className="rewind-button" onClick={handlePrev}>
                 <img src={rewindIcon} />
             </button>
-            <button className="queue-button" onClick={handleQueue}>
+            <button className="queue-button" onClick={onToggleQueue}>
                 <img src={queueIcon} />
             </button>
         </div>

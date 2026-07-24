@@ -1,0 +1,46 @@
+.queue-container {
+    flex: 1;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.queue-title {
+    flex-shrink: 0;
+    font-size: medium;
+    text-align: center;
+    background-color: #fff;
+    color: #333;
+}
+
+.queue-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.queue-item {
+    display: flex;
+    flex-direction: row;
+    padding: 2% 2%;
+    background-color: #fff;
+    color: #333;
+    font-size: small;
+    cursor: default;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.queue-item:hover {
+    background-color: #0a6cff;
+    /* classic iPod blue */
+    color: #fff;
+    /* text flips to white so it's readable against the blue */
+}
+
+.queue-track-name {
+    font-weight: bold;
+}
+
+.queue-artist-name {
+    font-weight: normal;
+}

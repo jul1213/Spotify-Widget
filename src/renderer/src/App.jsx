@@ -7,6 +7,8 @@ import Screen from './components/Screen/Screen'
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(null)
+  const [showQueue, setShowQueue] = useState(false)
+  const [queueData, setQueueData] = useState(null)
 
   const handleLogin = async () => {
     // const tokens = await window.spotifyControls.login()
@@ -40,12 +42,14 @@ function App() {
   }, [])
 
 
+  const toggleQueue = () => setShowQueue(prev => !prev)
+
   return (
     <div className="widget-container">
       <TitleBar />
       <div className="player-content">
-        <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} />
-        <PlayerControls isPlaying={currentTrack?.is_playing ?? false} />
+        <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} showQueue={showQueue} queueData={null} />
+        <PlayerControls isPlaying={currentTrack?.is_playing ?? false} onToggleQueue={toggleQueue} />
       </div>
     </div>
   )

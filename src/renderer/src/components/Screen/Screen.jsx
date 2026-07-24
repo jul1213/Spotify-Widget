@@ -1,15 +1,21 @@
 import './Screen.css'
 import TrackInfo from '../TrackInfo/TrackInfo'
 import ProgressBar from '../ProgressBar/ProgressBar'
+import QueueView from '../QueueView/QueueView'
 
-function Screen({ isLoggedIn, onLogin, track }) {
+function Screen({ isLoggedIn, onLogin, track, showQueue, queueData }) {
     return (
         <div className="screen-container" >
             <div className="screen-display">
                 {isLoggedIn ? (
                     <>
-                        <TrackInfo track={track} />
-                        <ProgressBar track={track} />
+                        <div className='now-playing-panel'>
+                            <TrackInfo track={track} />
+                            <ProgressBar track={track} />
+                        </div>
+                        <div className={`queue-panel ${showQueue ? 'queue-visible' : ''}`}>
+                            <QueueView queueData={queueData} />
+                        </div>
                     </>
                 ) : (
                     <button className='login-button' onClick={onLogin}>

@@ -20,4 +20,34 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+
+    overflow: hidden;
+}
+
+.now-playing-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5%;
+}
+
+.queue-panel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.queue-panel.queue-visible {
+    transform: translateX(0%);
+    /* slides in to fully cover the screen */
 }
