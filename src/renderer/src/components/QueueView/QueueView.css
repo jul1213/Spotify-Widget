@@ -5,13 +5,16 @@
 
     display: flex;
     flex-direction: column;
+    line-height: 1.2;
 }
 
 .queue-title {
     flex-shrink: 0;
     font-size: medium;
+    font-weight: bold;
+    /* padding: 0% 2%; */
     text-align: center;
-    background-color: #fff;
+    background-color: #f1f0f0;
     color: #333;
 }
 
@@ -23,8 +26,9 @@
 
 .queue-item {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding: 2% 2%;
+    gap: 0px;
     background-color: #fff;
     color: #333;
     font-size: small;
@@ -41,8 +45,29 @@
 
 .queue-track-name {
     font-weight: bold;
+    font-size: small;
 }
 
 .queue-artist-name {
     font-weight: normal;
+    font-size: small;
+}
+
+.current-track-info {
+    /* text-align: center; */
+    padding: 2% 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+.current-track-name {
+    font-weight: bold;
+    color: #333;
+    font-size: small;
+}
+
+.current-artist-name {
+    font-weight: small;
+    color: #999;
+    font-size: small;
 }
