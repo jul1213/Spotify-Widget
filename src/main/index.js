@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
+import { getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playFromContext, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 
 let mainWindow
@@ -77,15 +77,19 @@ app.whenReady().then(async () => {
     try {
       return await apiCall(spotifyTokens.access_token)
     } catch (err) {
+      if (err.status === 401) {
+        // token expired
         try {
-          // crude check first
-        spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
-        await saveTokens(spotifyTokens)
-        return await apiCall(spotifyTokens.access_token)
-      } catch (retryErr) {
-        console.error('Spotify action failed permanently:', retryErr.message)
-        return null // swallow it here, once, centrally
+          spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
+          await saveTokens(spotifyTokens)
+          return await apiCall(spotifyTokens.access_token)
+        } catch (retryErr) {
+          console.error('Spotify token refresh failed:', retryErr.message)
+          return null
+        }
       }
+      console.error('Spotify action failed:', err.message)
+      return null
     }
   }
 
@@ -102,6 +106,10 @@ app.whenReady().then(async () => {
   ipcMain.handle('get-queue', async () => {
     if (!spotifyTokens) return null
     return withValidToken(getQueue)
+  })
+
+  ipcMain.handle('play-from-context', async (event, contextUri, trackUri) => {
+    return withValidToken((token) => playFromContext(token, contextUri, trackUri))
   })
 
   createWindow()

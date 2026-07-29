@@ -155,7 +155,12 @@ export async function getCurrentlyPlaying(accessToken) {
     }
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 
     return response.json()
@@ -170,7 +175,12 @@ export async function pauseTrack(accessToken) {
     })
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 }
 
@@ -183,7 +193,12 @@ export async function playTrack(accessToken) {
     })
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 }
 
@@ -196,7 +211,12 @@ export async function skipTrack(accessToken) {
     })
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 }
 
@@ -209,7 +229,12 @@ export async function previousTrack(accessToken) {
     })
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 }
 
@@ -222,8 +247,39 @@ export async function getQueue(accessToken) {
     })
 
     if (!response.ok) {
-        throw new Error(`Spotify API error: ${response.status}`)
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
     }
 
     return response.json()
+}
+
+export async function playFromContext(accessToken, contextUri, trackUri) {
+    const body = contextUri
+        ? { context_uri: contextUri, offset: { uri: trackUri } }
+        : { uris: [trackUri] }
+    
+    const response = await fetch('https://api.spotify.com/v1/me/player/play', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+
+    if (!response.ok) {
+        const error = new Error(`Spotify API error: ${response.status}`)
+        error.status = response.status
+        if (response.status === 429) {
+            error.retryAfter = Number(response.headers.get('Retry-After')) || 1
+        }
+        throw error
+    }
+
+    return true
 }
