@@ -1,3 +1,4 @@
+import Marquee from '../Marquee/Marquee'
 import './TrackInfo.css'
 
 function TrackInfo({ track }) {
@@ -12,7 +13,7 @@ function TrackInfo({ track }) {
                 style={{ backgroundImage: albumArtUrl ? `url(${albumArtUrl})` : 'none' }}
             />
             <div className='text-container'>
-                <span className='track-name'>{trackName}</span>
+                <Marquee className='track-name'>{trackName}</Marquee>
                 <span className='artist-name'>{artistName}</span>
             </div>
         </div>
