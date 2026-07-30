@@ -3,11 +3,17 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #b5e3d8;
+    background: linear-gradient(145deg, #d6fcf2, #beebe0);
     border-radius: 17.5px;
     box-shadow:
-        inset 10px 10px 14px rgb(0 0 0 / 25%),
-        inset -10px -10px 14px rgb(0 0 0 / 25%);
+        /* broader shadow - bottom right curve */
+        inset -14px -14px 30px rgba(0, 0, 0, 0.30),
+        /* tight, sharper shadow close to edge for definition */
+        inset -3px -3px 6px rgba(0, 0, 0, 0.50),
+        /* broader highlight - top left curve */
+        inset 14px 14px 30px rgba(255, 255, 255, 0.30),
+        /* tight, sharper highlight close to edge for definition */
+        inset 3px 3px 6px rgba(255, 255, 255, 0.85);
 }
 
 .player-content {

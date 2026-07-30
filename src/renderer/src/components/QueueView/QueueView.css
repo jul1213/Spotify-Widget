@@ -10,11 +10,10 @@
 
 .queue-title {
     flex-shrink: 0;
-    font-size: medium;
+    font-size: 12px;
     font-weight: bold;
-    /* padding: 0% 2%; */
     text-align: center;
-    background-color: #f1f0f0;
+    background-color: #eaeaea;
     color: #333;
 }
 
@@ -31,43 +30,43 @@
     gap: 0px;
     background-color: #fff;
     color: #333;
-    font-size: small;
     cursor: default;
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .queue-item:hover {
-    background-color: #0a6cff;
-    /* classic iPod blue */
+    background-color: #c9abec;
     color: #fff;
-    /* text flips to white so it's readable against the blue */
+}
+
+.queue-item:hover .queue-artist-name {
+    color: #fff;
 }
 
 .queue-track-name {
     font-weight: bold;
-    font-size: small;
+    font-size: 0.8em;
 }
 
 .queue-artist-name {
-    font-weight: normal;
-    font-size: small;
+    font-size: 0.65em;
+    color: #999;
 }
 
 .current-track-info {
-    /* text-align: center; */
     padding: 2% 2%;
     display: flex;
     flex-direction: column;
+    font-size: normal;
 }
 
 .current-track-name {
     font-weight: bold;
     color: #333;
-    font-size: small;
+    font-size: 0.75em;
 }
 
 .current-artist-name {
-    font-weight: small;
     color: #999;
-    font-size: small;
+    font-size: 0.65em;
 }

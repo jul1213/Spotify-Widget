@@ -4,17 +4,18 @@
     justify-content: flex-start;
     align-items: center;
     padding-left: 3%;
-    gap: 4%;
-    width: 100%
+    gap: 5%;
+    width: 100%;
 }
 
 .album-cover {
     aspect-ratio: 1 / 1;
     background-color: black;
-    width: 34.7%;
+    width: 45%;
     flex-shrink: 0;
     background-size: cover;
     background-position: center;
+    border: hidden;
 }
 
 .text-container {
@@ -22,18 +23,25 @@
     flex-direction: column;
     justify-content: flex-start;
     min-width: 0;
+    gap: 2px;
 }
 
 .track-name {
     font-weight: bold;
+    font-size: 13px;
+    color: black;
+    line-height: 1.1;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .artist-name {
-    font-size: 0.85em;
-    color: #666;
+    font-size: 0.75em;
+    color: rgb(68, 68, 68);
+    line-height: 1.1;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
