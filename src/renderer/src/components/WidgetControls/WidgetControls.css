@@ -3,9 +3,9 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 30px;
+    bottom: 0;
+    display: flex;
     z-index: 10;
-    -webkit-app-region: no-drag;
 }
 
 
@@ -19,6 +19,7 @@
     z-index: 10;
     background: rgba(0, 0, 0, 0);
     padding: 0 4px;
+    -webkit-app-region: no-drag;
 
     /* hidden state: shifted up above its own position & invisible */
     transform: translateY(-100%);
