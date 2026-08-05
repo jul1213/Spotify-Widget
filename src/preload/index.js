@@ -17,6 +17,11 @@ const spotifyControls = {
   playFromContext: (contextUri, trackUri) => ipcRenderer.invoke('play-from-context', contextUri, trackUri),
 }
 
+const appSettings = {
+  save: (settings) => ipcRenderer.invoke('save-settings', settings),
+  load: () => ipcRenderer.invoke('load-settings'),
+}
+
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
@@ -25,6 +30,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('windowControls', windowControls)
     contextBridge.exposeInMainWorld('spotifyControls', spotifyControls)
+    contextBridge.exposeInMainWorld('appSettings',appSettings )
   } catch (error) {
     console.error(error)
   }
@@ -32,4 +38,5 @@ if (process.contextIsolated) {
   window.electron = electronAPI
   window.windowControls = windowControls
   window.spotifyControls = spotifyControls
+  window.appSettings = appSettings
 }

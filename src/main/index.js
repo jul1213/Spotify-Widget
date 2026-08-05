@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playFromContext, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
+import { loadSettings, saveSettings } from './settings'
 
 let mainWindow
 
@@ -60,6 +61,7 @@ app.whenReady().then(async () => {
   ipcMain.on('ping', () => console.log('pong'))
   ipcMain.on('close', () => mainWindow.close())
 
+  /* SPOTIFY */
   let spotifyTokens = await loadTokens()
 
   ipcMain.handle('spotify-login', async () => {
@@ -110,6 +112,10 @@ app.whenReady().then(async () => {
   ipcMain.handle('play-from-context', async (event, contextUri, trackUri) => {
     return withValidToken((token) => playFromContext(token, contextUri, trackUri))
   })
+
+  /* SETTINGS */
+  ipcMain.handle('save-settings', (event, settings) => saveSettings(settings))
+  ipcMain.handle('load-settings', () => loadSettings())
 
   createWindow()
 

@@ -4,6 +4,7 @@ import './App.css'
 import PlayerControls from './components/PlayerControls/PlayerControls'
 import Screen from './components/Screen/Screen'
 import SettingsView from './components/SettingsView/SettingsView'
+import { PRESET_COLOURS } from './constants'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -60,10 +61,22 @@ function App() {
   }, [showQueue, fetchQueue])
 
   /* SETTINGS VIEW */
+  useEffect(() => {
+    const loadSavedColor = async () => {
+      const settings = await window.appSettings.load()
+      if (settings?.presetColor) {
+        const preset = PRESET_COLOURS.find(p => p.name === settings.presetColor)
+        if (preset) handleSelectColor(preset)
+      }
+    }
+    loadSavedColor()
+  })
+
   const handleSelectColor = (preset) => {
     setActiveColor(preset.name)
     document.documentElement.style.setProperty('--widget-light', preset.light)
     document.documentElement.style.setProperty('--widget-dark', preset.dark)
+    window.appSettings.save({ presetColor: preset.name })
   }
 
   return (
