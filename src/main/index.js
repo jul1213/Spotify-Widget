@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import { getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playFromContext, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
+import { deleteTokens, getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playFromContext, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 import { loadSettings, saveSettings } from './settings'
 
@@ -68,6 +68,11 @@ app.whenReady().then(async () => {
     spotifyTokens = await loginToSpotify()
     await saveTokens(spotifyTokens)
     return spotifyTokens
+  })
+
+  ipcMain.handle('spotify-logout', async () => {
+    spotifyTokens = null;
+    deleteTokens();
   })
   
   ipcMain.handle('spotify-check-auth', async() => {

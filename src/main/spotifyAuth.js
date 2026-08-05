@@ -34,6 +34,16 @@ export async function loadTokens() {
     }
 }
 
+export async function deleteTokens() {
+    try {
+        if (fs.existsSync(TOKEN_PATH)) {
+            fs.unlinkSync(TOKEN_PATH)
+        }
+    } catch (err) {
+        console.error("deleteTokens failed:", err)
+    }
+}
+
 
 /* the PKCE authorization flow starts with the creation of a code verifier. */
 function generateCodeVerifier() {

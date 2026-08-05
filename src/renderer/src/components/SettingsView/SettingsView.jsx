@@ -1,12 +1,12 @@
 import './SettingsView.css'
 import { PRESET_COLOURS } from '../../constants'
 
-function SettingsView({ onSelectColor, activeColor, onClose }) {
+function SettingsView({ onSelectColor, activeColor, onClose, onLogout }) {
     return (
         <div className="settings-overlay" onClick={onClose}>
-            <div className="settings-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="settings-panel">
                 <p className="settings-label">Pick a color</p>
-                <div className="color-row">
+                <div className="color-row" onClick={(e) => e.stopPropagation()}>
                     {PRESET_COLOURS.map((preset) => (
                         <button
                             key={preset.name}
@@ -19,6 +19,9 @@ function SettingsView({ onSelectColor, activeColor, onClose }) {
                         />
                     ))}
                 </div>
+                <button className='logout-btn' onClick={onLogout}>
+                    Log Out
+                </button>
             </div>
         </div>
     )

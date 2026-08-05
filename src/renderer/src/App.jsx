@@ -19,6 +19,16 @@ function App() {
     setIsLoggedIn(true)   // flip state once login succeeds
   }
 
+  const handleLogout = async () => {
+    await window.spotifyControls.logout()
+
+    setIsLoggedIn(false)
+    setCurrentTrack(null)
+    setQueueData(null)
+    setShowQueue(false)
+    setShowSettings(false)
+  }
+
   useEffect(() => {
     if (!isLoggedIn) return
 
@@ -92,6 +102,7 @@ function App() {
           activeColor={activeColor}
           onSelectColor={handleSelectColor}
           onClose={() => setShowSettings(false)}
+          onLogout={handleLogout}
         />
       )}
     </div>

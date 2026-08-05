@@ -7,6 +7,7 @@ const windowControls = {
 
 const spotifyControls = {
   login: () => ipcRenderer.invoke('spotify-login'),
+  logout: () => ipcRenderer.invoke('spotify-logout'),
   getCurrentTrack: () => ipcRenderer.invoke('spotify-get-current-track'),
   checkAuth: () => ipcRenderer.invoke('spotify-check-auth'),
   play: () => ipcRenderer.send('play-track'),
