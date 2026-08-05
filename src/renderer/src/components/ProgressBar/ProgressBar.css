@@ -20,7 +20,7 @@
     left: 0;
     height: 100%;
     border-radius: 2px;
-    background-color: #bdf1e194
+    background-color: var(--widget-dark, #beebe0);
 }
 
 .progress-times {

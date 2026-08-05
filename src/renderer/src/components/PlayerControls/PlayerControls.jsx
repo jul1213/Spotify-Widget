@@ -7,7 +7,6 @@ import queueIcon from '../../assets/queue.svg'
 function PlayerControls({ isPlaying, onToggleQueue }) {
     const handleSkip = () => window.spotifyControls.skip()
     const handlePrev = () => window.spotifyControls.prev()
-    // const handleQueue = () => console.log("queue clicked")
     const handleSelect = () => console.log("select clicked")
 
     const handlePlayPause = () => {

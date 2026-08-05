@@ -16,7 +16,7 @@
 .centre-button {
     position: absolute;
     border-radius: 50%;
-    background-color: #d8f8f2;
+    background-color: var(--widget-dark, #beebe0);
     border: 0.1px hidden #b3b3b382;
     aspect-ratio: 1 / 1;
     width: 35.8%;

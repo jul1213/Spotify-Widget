@@ -1,18 +1,19 @@
 import { useState, useEffect, useCallback } from 'react'
-import TitleBar from './components/WidgetControls/WidgetControls'
+import WidgetControls from './components/WidgetControls/WidgetControls'
 import './App.css'
 import PlayerControls from './components/PlayerControls/PlayerControls'
 import Screen from './components/Screen/Screen'
+import SettingsView from './components/SettingsView/SettingsView'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(null)
   const [showQueue, setShowQueue] = useState(false)
   const [queueData, setQueueData] = useState(null)
+  const [showSettings, setShowSettings] = useState(false)
+  const [activeColor, setActiveColor] = useState('mint')
 
   const handleLogin = async () => {
-    // const tokens = await window.spotifyControls.login()
-    // console.log('Got tokens:', tokens)
     await window.spotifyControls.login()
     setIsLoggedIn(true)   // flip state once login succeeds
   }
@@ -41,7 +42,7 @@ function App() {
     checkAuth()
   }, [])
 
-
+  /* QUEUE VIEW */
   const toggleQueue = () => setShowQueue(prev => !prev)
   const fetchQueue = useCallback(async () => {
     const data = await window.spotifyControls.getQueue()
@@ -58,13 +59,28 @@ function App() {
     return () => clearInterval(interval)
   }, [showQueue, fetchQueue])
 
+  /* SETTINGS VIEW */
+  const handleSelectColor = (preset) => {
+    setActiveColor(preset.name)
+    document.documentElement.style.setProperty('--widget-light', preset.light)
+    document.documentElement.style.setProperty('--widget-dark', preset.dark)
+  }
+
   return (
     <div className="widget-container">
-      <TitleBar />
+      <WidgetControls onSettingsClick={() => setShowSettings(true)} />
       <div className="player-content">
         <Screen isLoggedIn={isLoggedIn} onLogin={handleLogin} track={currentTrack} showQueue={showQueue} queueData={queueData} refetchQueue={fetchQueue} />
         <PlayerControls isPlaying={currentTrack?.is_playing ?? false} onToggleQueue={toggleQueue} />
       </div>
+
+      {showSettings && (
+        <SettingsView
+          activeColor={activeColor}
+          onSelectColor={handleSelectColor}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
     </div>
   )
 }
