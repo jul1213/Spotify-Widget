@@ -12,10 +12,10 @@ function Marquee({ children, className }) {
 
         const distance = text.scrollWidth - container.clientWidth
 
-        if (distance > 0) {
+        if (distance > 10) {
             setScroll(true);
 
-            const duration = distance / 10; // 30pix per second
+            const duration = distance / 8;
 
             text.style.setProperty(
                 "--scroll-distance",
