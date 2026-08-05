@@ -2,7 +2,6 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 const windowControls = {
-  minimize: () => ipcRenderer.send('minimize'),
   close: () => ipcRenderer.send('close'),
 }
 

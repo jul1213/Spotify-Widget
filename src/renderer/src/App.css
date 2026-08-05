@@ -3,6 +3,7 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    -webkit-app-region: drag;
     background: linear-gradient(145deg, #d6fcf2, #beebe0);
     border-radius: 17.5px;
     box-shadow:

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import TitleBar from './components/TitleBar/TitleBar'
+import TitleBar from './components/WidgetControls/WidgetControls'
 import './App.css'
 import PlayerControls from './components/PlayerControls/PlayerControls'
 import Screen from './components/Screen/Screen'

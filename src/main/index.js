@@ -25,7 +25,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
+    // mainWindow.webContents.openDevTools({ mode: 'detach' }) // opens in a separate window
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -58,7 +58,6 @@ app.whenReady().then(async () => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
-  ipcMain.on('minimize', () => mainWindow.minimize())
   ipcMain.on('close', () => mainWindow.close())
 
   let spotifyTokens = await loadTokens()
