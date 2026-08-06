@@ -3,11 +3,10 @@
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    height: 20%;
     display: flex;
     z-index: 10;
 }
-
 
 .title-bar {
     position: absolute;
@@ -21,16 +20,15 @@
     padding: 0 4px;
     -webkit-app-region: no-drag;
 
-    /* hidden state: shifted up above its own position & invisible */
-    transform: translateY(-100%);
+    /* hidden state: invisible */
     opacity: 0;
-    transition: transform 0.2s ease 1s, opacity 0.2s ease 1s;
+    pointer-events: none;
+    transition: opacity 0.2s ease 0.5s;
 }
 
-/* visible state: slides down */
 .hot-zone:hover .title-bar {
-    transform: translateY(0);
     opacity: 1;
+    pointer-events: auto;
     transition-delay: 0s;
 }
 

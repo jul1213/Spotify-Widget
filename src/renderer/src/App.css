@@ -2,10 +2,9 @@
     position: relative;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
     -webkit-app-region: drag;
     background: linear-gradient(145deg, var(--widget-light, #d6fcf2), var(--widget-dark, #beebe0));
-    border-radius: 17.5px;
+    clip-path: inset(0 round 17.5px);
     box-shadow:
         /* broader shadow - bottom right curve */
         inset -14px -14px 30px rgba(0, 0, 0, 0.30),
