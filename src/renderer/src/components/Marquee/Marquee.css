@@ -4,23 +4,6 @@
     white-space: nowrap;
 }
 
-.marquee-text.scrolling {
-    animation: scroll-text var(--scroll-duration) linear infinite;
-}
-
-@keyframes scroll-text {
-
-    0%,
-    15% {
-        transform: translateX(0);
-    }
-
-    50%,
-    65% {
-        transform: translateX(var(--scroll-distance));
-    }
-
-    100% {
-        transform: translateX(0);
-    }
+.marquee-text {
+    display: inline-block;
 }
