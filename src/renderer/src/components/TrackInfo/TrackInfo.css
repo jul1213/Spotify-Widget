@@ -11,7 +11,7 @@
 .album-cover {
     aspect-ratio: 1 / 1;
     background-color: black;
-    width: 45%;
+    width: 40%;
     flex-shrink: 0;
     background-size: cover;
     background-position: center;

@@ -10,8 +10,12 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 210,
-    height: 300,
+    width: 175,
+    height: 250,
+    minWidth: 140,
+    minHeight: 199,
+    maxWidth: 324,
+    maxHeight: 462,
     backgroundColor: '#00000000',
     show: false,
     autoHideMenuBar: true,
@@ -24,6 +28,8 @@ function createWindow() {
     },
     alwaysOnTop: true,
   })
+  
+  mainWindow.setAspectRatio(0.7)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
