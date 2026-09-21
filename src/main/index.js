@@ -33,7 +33,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    // mainWindow.webContents.openDevTools({ mode: 'detach' })
+    mainWindow.webContents.openDevTools({ mode: 'detach' })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -70,6 +70,7 @@ app.whenReady().then(async () => {
 
   /* SPOTIFY */
   let spotifyTokens = await loadTokens()
+  let refreshPromise = null
 
   ipcMain.handle('spotify-login', async () => {
     spotifyTokens = await loginToSpotify()
@@ -90,19 +91,22 @@ app.whenReady().then(async () => {
     try {
       return await apiCall(spotifyTokens.access_token)
     } catch (err) {
-      if (err.status === 401) {
-        // token expired
-        try {
-          spotifyTokens = await refreshAccessToken(spotifyTokens.refresh_token)
-          await saveTokens(spotifyTokens)
-          return await apiCall(spotifyTokens.access_token)
-        } catch (retryErr) {
-          console.error('Spotify token refresh failed:', retryErr.message)
-          return null
+      console.log('Spotify call failed, attempting refresh:', err.message)
+      try {
+        if (!refreshPromise) {
+          refreshPromise = (async () => {
+            const newTokens = await refreshAccessToken(spotifyTokens.refresh_token)
+            spotifyTokens = newTokens
+            await saveTokens(spotifyTokens)
+            return newTokens
+          })().finally(() => { refreshPromise = null })
         }
+        await refreshPromise
+        return await apiCall(spotifyTokens.access_token)
+      } catch (retryErr) {
+        console.error('Spotify action failed:', err.message)
+        return null
       }
-      console.error('Spotify action failed:', err.message)
-      return null
     }
   }
 
