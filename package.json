@@ -1,6 +1,6 @@
 {
   "name": "spotify-widget",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "An Electron application with React",
   "main": "./out/main/index.js",
   "author": "julie",
@@ -56,6 +56,9 @@
       "icon": "build/icon.icns",
       "target": "dmg"
     },
-    "files": ["out/**/*", "resources/**/*"]
+    "files": [
+      "out/**/*",
+      "resources/**/*"
+    ]
   }
 }
