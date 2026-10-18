@@ -145,6 +145,13 @@ export async function refreshAccessToken(refreshToken) {
     const response = await fetch('https://accounts.spotify.com/api/token', payload)
     const data = await response.json()
 
+    if (!response.ok) {
+        const error = new Error(`Token refresh failed: ${data.error}`)
+        error.status = response.status
+        error.code = data.error
+        throw error
+    }
+
     return {
         ...data,
         refresh_token: data.refresh_token ?? refreshToken           // keep old one if spotify didn't give new

@@ -24,7 +24,7 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: true
     },
     alwaysOnTop: true,
   })
@@ -33,7 +33,7 @@ function createWindow() {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.openDevTools({ mode: 'detach' })
+    if (is.dev) mainWindow.webContents.openDevTools({ mode: 'detach' })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -104,7 +104,12 @@ app.whenReady().then(async () => {
         await refreshPromise
         return await apiCall(spotifyTokens.access_token)
       } catch (retryErr) {
-        console.error('Spotify action failed:', err.message)
+        console.error('Spotify action failed:', retryErr.message)
+        if (retryErr.code === 'invalid_grant') {
+          spotifyTokens = null
+          deleteTokens()
+          mainWindow.webContents.send('spotify-auth-lost')
+        }
         return null
       }
     }

@@ -53,6 +53,13 @@ function App() {
     checkAuth()
   }, [])
 
+  useEffect(() => {
+    const unsubscribe = window.spotifyControls.onAuthLost(() => {
+      setIsLoggedIn(false)
+    })
+    return unsubscribe
+  }, [])
+
   /* QUEUE VIEW */
   const toggleQueue = () => setShowQueue(prev => !prev)
   const fetchQueue = useCallback(async () => {
@@ -80,7 +87,7 @@ function App() {
       }
     }
     loadSavedColor()
-  })
+  }, [])
 
   const handleSelectColor = (preset) => {
     setActiveColor(preset.name)

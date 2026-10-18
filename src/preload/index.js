@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
 
 const windowControls = {
   close: () => ipcRenderer.send('close'),
@@ -16,6 +15,11 @@ const spotifyControls = {
   prev: () => ipcRenderer.send('prev-track'),
   getQueue: () => ipcRenderer.invoke('get-queue'),
   playFromContext: (contextUri, trackUri) => ipcRenderer.invoke('play-from-context', contextUri, trackUri),
+  onAuthLost: (callback) => {
+    const handler = () => callback()
+    ipcRenderer.on('spotify-auth-lost', handler)
+    return () => ipcRenderer.removeListener('spotify-auth-lost', handler)
+  }
 }
 
 const appSettings = {
@@ -28,7 +32,6 @@ const appSettings = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('windowControls', windowControls)
     contextBridge.exposeInMainWorld('spotifyControls', spotifyControls)
     contextBridge.exposeInMainWorld('appSettings',appSettings )
@@ -36,7 +39,6 @@ if (process.contextIsolated) {
     console.error(error)
   }
 } else {
-  window.electron = electronAPI
   window.windowControls = windowControls
   window.spotifyControls = spotifyControls
   window.appSettings = appSettings
