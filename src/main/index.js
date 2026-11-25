@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { deleteTokens, getCurrentlyPlaying, getQueue, loadTokens, loginToSpotify, pauseTrack, playFromContext, playTrack, previousTrack, refreshAccessToken, saveTokens, skipTrack } from './spotifyAuth'
 import icon from '../../resources/icon.png?asset'
 import { loadSettings, saveSettings } from './settings'
+import { createTokenManager } from './tokenManager'
 
 let mainWindow
 
@@ -68,70 +69,46 @@ app.whenReady().then(async () => {
   ipcMain.on('ping', () => console.log('pong'))
   ipcMain.on('close', () => mainWindow.close())
 
-  /* SPOTIFY */
-  let spotifyTokens = await loadTokens()
-  let refreshPromise = null
+  /* SPOTIFY */  
+  const manager = createTokenManager({
+    initialTokens: await loadTokens(),
+    refreshAccessToken, saveTokens, deleteTokens,
+    onAuthLost: () => mainWindow.webContents.send('spotify-auth-lost'),
+  })
 
   ipcMain.handle('spotify-login', async () => {
-    spotifyTokens = await loginToSpotify()
-    await saveTokens(spotifyTokens)
-    return spotifyTokens
+    const tokens = await loginToSpotify()
+    await saveTokens(tokens)
+    manager.setTokens(tokens)
+    return tokens
   })
 
   ipcMain.handle('spotify-logout', async () => {
-    spotifyTokens = null;
+    manager.setTokens(null)
     deleteTokens();
   })
   
   ipcMain.handle('spotify-check-auth', async() => {
-    return spotifyTokens !== null
+    return manager.getTokens() !== null
   })
-
-  async function withValidToken(apiCall) {
-    try {
-      return await apiCall(spotifyTokens.access_token)
-    } catch (err) {
-      console.log('Spotify call failed, attempting refresh:', err.message)
-      try {
-        if (!refreshPromise) {
-          refreshPromise = (async () => {
-            const newTokens = await refreshAccessToken(spotifyTokens.refresh_token)
-            spotifyTokens = newTokens
-            await saveTokens(spotifyTokens)
-            return newTokens
-          })().finally(() => { refreshPromise = null })
-        }
-        await refreshPromise
-        return await apiCall(spotifyTokens.access_token)
-      } catch (retryErr) {
-        console.error('Spotify action failed:', retryErr.message)
-        if (retryErr.code === 'invalid_grant') {
-          spotifyTokens = null
-          deleteTokens()
-          mainWindow.webContents.send('spotify-auth-lost')
-        }
-        return null
-      }
-    }
-  }
 
   ipcMain.handle('spotify-get-current-track', async() => {
-    if (!spotifyTokens) return null
-    return withValidToken(getCurrentlyPlaying)
+    if (!(manager.getTokens())) return null
+    return manager.withValidToken(getCurrentlyPlaying)
   })
 
-  ipcMain.on('pause-track', () => withValidToken(pauseTrack))
-  ipcMain.on('play-track', () => withValidToken(playTrack))
-  ipcMain.on('skip-track', () => withValidToken(skipTrack))
-  ipcMain.on('prev-track', () => withValidToken(previousTrack))
+  ipcMain.on('pause-track', () => manager.withValidToken(pauseTrack))
+  ipcMain.on('play-track', () => manager.withValidToken(playTrack))
+  ipcMain.on('skip-track', () => manager.withValidToken(skipTrack))
+  ipcMain.on('prev-track', () => manager.withValidToken(previousTrack))
 
   ipcMain.handle('get-queue', async () => {
-    if (!spotifyTokens) return null
-    return withValidToken(getQueue)
+    if (!(manager.getTokens())) return null
+    return manager.withValidToken(getQueue)
   })
 
   ipcMain.handle('play-from-context', async (event, contextUri, trackUri) => {
-    return withValidToken((token) => playFromContext(token, contextUri, trackUri))
+    return manager.withValidToken((token) => playFromContext(token, contextUri, trackUri))
   })
 
   /* SETTINGS */
