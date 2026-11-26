@@ -8,14 +8,16 @@ export function createTokenManager ({
         try {
             return await apiCall(tokens.access_token)
         } catch (err) {
+            if (err.status != 401) return null      // not an auth problem, don't refresh
+        }
+
+        // refresh
         try {
             if (!refreshPromise) {
                 refreshPromise = (async () => {
-                    const newTokens = await refreshAccessToken(tokens.refresh_token)
-                    tokens = newTokens
+                    tokens = await refreshAccessToken(tokens.refresh_token)
                     await saveTokens(tokens)
-                    return newTokens
-                })().finally(() => { refreshPromise = null })
+                })().finally(() => { refreshPromise = null})
             }
             await refreshPromise
             return await apiCall(tokens.access_token)
@@ -27,7 +29,6 @@ export function createTokenManager ({
             }
             return null
         }
-    }
   }
 
   return {
